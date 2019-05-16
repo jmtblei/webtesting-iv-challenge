@@ -1,5 +1,6 @@
 const request = require("supertest");
 const server = require("./server");
+const db = require('../data/dbConfig');
 
 describe("server", () => {
   it("sets the environment to testing", () => {
@@ -30,4 +31,23 @@ describe("server", () => {
         })
     });
   });
+  describe("POST /", () => {
+    afterEach(async () => {
+        await db("users").truncate();
+    });
+    it("responds with 201 when body correct", async () => {
+        const body = { name: "snackpal" };
+        const response = await request(server)
+          .post("/")
+          .send(body);
+        expect(response.status).toBe(201);
+    });
+    it("responds with 400 when body incorrect", async () => {
+        const body = {};
+        const response = await request(server)
+          .post("/")
+          .send(body);
+        expect(response.status).toBe(400);
+      });
+  })
 });
