@@ -50,4 +50,23 @@ describe("server", () => {
         expect(response.status).toBe(400);
       });
   })
+  describe("POST /", () => {
+    afterEach(async () => {
+        await db("users").truncate();
+    });
+    it("responds with 201 when existing user with name is deleted", async () => {
+        const body = { name: "phonefriend" };
+        const response = await request(server)
+          .delete("/")
+          .send(body);
+        expect(response.status).toBe(200);
+    });
+    it("responds with 400 when selected name delete fails", async () => {
+        const body = {};
+        const response = await request(server)
+          .delete("/")
+          .send(body);
+        expect(response.status).toBe(400);
+    });
+  })
 });

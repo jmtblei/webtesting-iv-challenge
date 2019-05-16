@@ -19,4 +19,14 @@ server.post("/", async (req, res) => {
     }
 });
 
+server.delete("/", async (req, res) => {
+    const user = req.body;
+    if (user.name) {
+      const removed = await users.remove(user);
+      res.status(200).json({ removed });
+    } else {
+        res.status(400).json({ error: "can't remove, bad request" });
+    }
+});
+
 module.exports = server;
